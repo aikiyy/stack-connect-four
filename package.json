@@ -4,5 +4,9 @@
   "main": "index.js",
   "repository": "git@github.com:aikiyy/stack-connect-four.git",
   "author": "Aiki YOUGAI <phoenix22.you@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0"
+  }
 }
