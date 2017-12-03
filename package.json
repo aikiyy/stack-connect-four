@@ -6,8 +6,10 @@
   "author": "Aiki YOUGAI <phoenix22.you@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "css-loader": "^0.28.7",
     "react": "^16.2.0",
-    "react-dom": "^16.2.0"
+    "react-dom": "^16.2.0",
+    "style-loader": "^0.19.0"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
