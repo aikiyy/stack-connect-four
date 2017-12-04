@@ -1,4 +1,5 @@
 import React from 'react'
+import {Square} from './Square'
 
 export class Board extends React.Component {
   constructor(props) {
@@ -12,7 +13,7 @@ export class Board extends React.Component {
     var list = [];
 
     for(var i in this.state.squares){
-      list.push(<li>{this.state.squares[i]}</li>);
+      list.push(<li><Square value={this.state.squares[i]} /></li>);
     }
 
     return (
