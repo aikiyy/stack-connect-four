@@ -10,6 +10,16 @@ export class Board extends React.Component {
     };
   }
 
+  handleClick(i) {
+    const squares = this.state.squares.slice();
+    squares[i] = 'X';
+    this.setState({squares: squares});
+  }
+
+  renderSquare(i) {
+    return <Square value={this.state.squares[i]} onClick={() => this.handleClick(i)} />
+  }
+
   render() {
     var list = [];
 
@@ -17,7 +27,8 @@ export class Board extends React.Component {
       list.push(<div className="board-list"></div>);
       for(let j = 0; j < this.props.width; j++) {
         let k = {i} * this.props.depth + this.props.width;
-        list.push(<Square value={this.state.squares[k]} />);
+//        list.push(<Square value={this.state.squares[k]} onClick={() => this.handleClick(k)} />);
+        list.push(this.renderSquare(k))
       }
     }
 
