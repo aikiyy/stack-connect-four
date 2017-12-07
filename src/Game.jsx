@@ -61,8 +61,14 @@ function calculateWinner(squares, i, props) {
   if (checkVertical(squares, i, playerChar, props)) {
     return squares[i]
   };
-  // 斜め判定（北西から南西）
-  // 斜め判定（北西から南西）
+  // 斜め判定（左上から右下）
+  if (checkSlantingULLR(squares, i, playerChar, props)) {
+    return squares[i]
+  };
+  // 斜め判定（右上から左下）
+  if (checkSlantingURLL(squares, i, playerChar, props)) {
+    return squares[i]
+  };
   return ''
 }
 
@@ -150,6 +156,86 @@ function checkDownVertical(squares, i, playerChar, props, chainNum) {
   }
   if (squares[i] == playerChar) {
     return checkDownVertical(squares, i+props.width, playerChar, props, chainNum+1);
+  } else {
+    return chainNum
+  }
+}
+
+// 左上(upper left) から右下(lower right) の斜めチェック
+function checkSlantingULLR(squares, i, playerChar, props) {
+  let chainNum = 0;
+  // 左上側チェック
+  chainNum += checkSlantingUL(squares, i-props.width-1, playerChar, props, 0);
+  // 右下チェック
+  chainNum += checkSlantingLR(squares, i+props.width+1, playerChar, props, 0);
+  console.log(chainNum);
+  // 勝利判定
+  if (chainNum >= 3) {
+    return true
+  } else {
+    return false
+  }
+}
+
+// 左上側につながっている個数を再帰的にチェック
+function checkSlantingUL(squares, i, playerChar, props, chainNum) {
+  if (isNullSquare(squares, i)) {
+    return chainNum
+  }
+  if (squares[i] == playerChar) {
+    return checkSlantingUL(squares, i-props.width-1, playerChar, props, chainNum+1);
+  } else {
+    return chainNum
+  }
+}
+
+// 右下側につながっている個数を再帰的にチェック
+function checkSlantingLR(squares, i, playerChar, props, chainNum) {
+  if (isNullSquare(squares, i)) {
+    return chainNum
+  }
+  if (squares[i] == playerChar) {
+    return checkSlantingLR(squares, i+props.width+1, playerChar, props, chainNum+1);
+  } else {
+    return chainNum
+  }
+}
+
+// 右上(upper right) から左下(lower left) の斜めチェック
+function checkSlantingURLL(squares, i, playerChar, props) {
+  let chainNum = 0;
+  // 右上側チェック
+  chainNum += checkSlantingUR(squares, i-props.width+1, playerChar, props, 0);
+  // 左下側チェック
+  chainNum += checkSlantingLL(squares, i+props.width-1, playerChar, props, 0);
+  console.log(chainNum);
+  // 勝利判定
+  if (chainNum >= 3) {
+    return true
+  } else {
+    return false
+  }
+}
+
+// 右上側につながっている個数を再帰的にチェック
+function checkSlantingUR(squares, i, playerChar, props, chainNum) {
+  if (isNullSquare(squares, i)) {
+    return chainNum
+  }
+  if (squares[i] == playerChar) {
+    return checkSlantingUR(squares, i-props.width+1, playerChar, props, chainNum+1);
+  } else {
+    return chainNum
+  }
+}
+
+// 左下側につながっている個数を再帰的にチェック
+function checkSlantingLL(squares, i, playerChar, props, chainNum) {
+  if (isNullSquare(squares, i)) {
+    return chainNum
+  }
+  if (squares[i] == playerChar) {
+    return checkSlantingLL(squares, i+props.width-1, playerChar, props, chainNum+1);
   } else {
     return chainNum
   }
