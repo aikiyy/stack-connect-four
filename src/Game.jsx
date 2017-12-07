@@ -6,7 +6,7 @@ export class Game extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      squares: Array(props.width * props.depth).fill(null),
+      squares: Array(props.width * props.depth).fill(''),
       xIsNext: true,
       winner: ''
     };
@@ -15,6 +15,9 @@ export class Game extends React.Component {
   handleClick(i) {
     const squares = this.state.squares.slice();
     squares[i] = this.state.xIsNext ? 'X' : 'O';
+    if (!canClick(squares, i, this.props)) {
+      return
+    }
     let winner = calculateWinner(squares, i, this.props);
     this.setState({
       squares: squares,
@@ -48,6 +51,15 @@ export class Game extends React.Component {
         </div>
       </div>
     );
+  }
+}
+
+// クリック可能なsquareか判定
+function canClick(squares, i, props) {
+  if (isNullSquare(squares, i+props.width) || squares[i+props.width] != '') {
+    return true
+  } else {
+    return false
   }
 }
 
@@ -90,6 +102,7 @@ function checkHorizontal(squares, i, playerChar, props) {
   if (i%(props.width-1) != 0) {
     chainNum += checkRightHorizontal(squares, i+1, playerChar, props, 0);
   }
+  console.log(chainNum);
   // 勝利判定
   if (chainNum >= 3) {
     return true
@@ -128,7 +141,6 @@ function checkVertical(squares, i, playerChar, props) {
   chainNum += checkUpVertical(squares, i-props.width, playerChar, props, 0);
   // 下側チェック
   chainNum += checkDownVertical(squares, i+props.width, playerChar, props, 0);
-  console.log(chainNum);
   // 勝利判定
   if (chainNum >= 3) {
     return true
@@ -168,7 +180,6 @@ function checkSlantingULLR(squares, i, playerChar, props) {
   chainNum += checkSlantingUL(squares, i-props.width-1, playerChar, props, 0);
   // 右下チェック
   chainNum += checkSlantingLR(squares, i+props.width+1, playerChar, props, 0);
-  console.log(chainNum);
   // 勝利判定
   if (chainNum >= 3) {
     return true
@@ -208,7 +219,6 @@ function checkSlantingURLL(squares, i, playerChar, props) {
   chainNum += checkSlantingUR(squares, i-props.width+1, playerChar, props, 0);
   // 左下側チェック
   chainNum += checkSlantingLL(squares, i+props.width-1, playerChar, props, 0);
-  console.log(chainNum);
   // 勝利判定
   if (chainNum >= 3) {
     return true
