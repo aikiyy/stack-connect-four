@@ -58,6 +58,9 @@ function calculateWinner(squares, i, props) {
     return squares[i]
   };
   // 縦判定
+  if (checkVertical(squares, i, playerChar, props)) {
+    return squares[i]
+  };
   // 斜め判定（北西から南西）
   // 斜め判定（北西から南西）
   return ''
@@ -82,7 +85,7 @@ function checkHorizontal(squares, i, playerChar, props) {
     chainNum += checkRightHorizontal(squares, i+1, playerChar, props, 0);
   }
   // 勝利判定
-  if (chainNum == 3) {
+  if (chainNum >= 3) {
     return true
   } else {
     return false
@@ -108,6 +111,45 @@ function checkRightHorizontal(squares, i, playerChar, props, chainNum) {
   }
   if (squares[i] == playerChar) {
     return checkRightHorizontal(squares, i+1, playerChar, props, chainNum+1);
+  } else {
+    return chainNum
+  }
+}
+
+function checkVertical(squares, i, playerChar, props) {
+  let chainNum = 0;
+  // 上側チェック
+  chainNum += checkUpVertical(squares, i-props.width, playerChar, props, 0);
+  // 下側チェック
+  chainNum += checkDownVertical(squares, i+props.width, playerChar, props, 0);
+  console.log(chainNum);
+  // 勝利判定
+  if (chainNum >= 3) {
+    return true
+  } else {
+    return false
+  }
+}
+
+// 上側につながっている個数を再帰的にチェック
+function checkUpVertical(squares, i, playerChar, props, chainNum) {
+  if (isNullSquare(squares, i)) {
+    return chainNum
+  }
+  if (squares[i] == playerChar) {
+    return checkUpVertical(squares, i-props.width, playerChar, props, chainNum+1);
+  } else {
+    return chainNum
+  }
+}
+
+// 下側につながっている個数を再帰的にチェック
+function checkDownVertical(squares, i, playerChar, props, chainNum) {
+  if (isNullSquare(squares, i)) {
+    return chainNum
+  }
+  if (squares[i] == playerChar) {
+    return checkDownVertical(squares, i+props.width, playerChar, props, chainNum+1);
   } else {
     return chainNum
   }
