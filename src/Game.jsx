@@ -7,25 +7,43 @@ export class Game extends React.Component {
     super(props);
     this.state = {
       squares: Array(props.width * props.depth).fill(''),
+      canClickSquares: Array(props.width * props.depth).fill(false),
       xIsNext: true,
       winner: ''
     };
   }
 
+  componentDidMount() {
+    // クリック可能箇所更新
+    const canClickSquares = this.state.canClickSquares.slice();
+    for(let i = 0; i < this.props.width; i++) {
+      canClickSquares[this.props.width * (this.props.depth - 1) + i] = true
+    }
+    this.setState({
+      canClickSquares: canClickSquares
+    });
+  }
+
   handleClick(i) {
     const squares = this.state.squares.slice();
+    const canClickSquares = this.state.canClickSquares.slice();
     // 土台でない、または既にクリックされている場合
-    if (!canClick(squares, i, this.props) || squares[i]) {
+    if (!canClickSquares[i]) {
       return
     }
     // 勝利者が確定した場合
     if (this.state.winner) {
       return
     }
+    // クリック可能箇所更新
+    canClickSquares[i] = null
+    canClickSquares[i - this.props.width] = true
+
     squares[i] = this.state.xIsNext ? 'X' : 'O';
     let winner = calculateWinner(squares, i, this.props);
     this.setState({
       squares: squares,
+      canClickSquares: canClickSquares,
       xIsNext: !this.state.xIsNext,
       winner: winner
     });
@@ -48,6 +66,7 @@ export class Game extends React.Component {
             depth={this.props.depth}
             width={this.props.width}
             squares={this.state.squares} 
+            canClickSquares={this.state.canClickSquares} 
             onClick={(i) => this.handleClick(i)}
           />
         </div>
@@ -56,15 +75,6 @@ export class Game extends React.Component {
         </div>
       </div>
     );
-  }
-}
-
-// クリック可能なsquareか判定
-function canClick(squares, i, props) {
-  if (isNullSquare(squares, i+props.width) || squares[i+props.width] != '') {
-    return true
-  } else {
-    return false
   }
 }
 
