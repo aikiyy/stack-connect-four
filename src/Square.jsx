@@ -13,7 +13,6 @@ export class Square extends React.Component {
 
     return (
       <button
-        key={this.props.num}
         className="square"
         onClick={() => this.props.onClick()}
         style={canClickStyle}
