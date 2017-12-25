@@ -14,10 +14,15 @@ export class Game extends React.Component {
 
   handleClick(i) {
     const squares = this.state.squares.slice();
-    squares[i] = this.state.xIsNext ? 'X' : 'O';
-    if (!canClick(squares, i, this.props)) {
+    // 土台でない、または既にクリックされている場合
+    if (!canClick(squares, i, this.props) || squares[i]) {
       return
     }
+    // 勝利者が確定した場合
+    if (this.state.winner) {
+      return
+    }
+    squares[i] = this.state.xIsNext ? 'X' : 'O';
     let winner = calculateWinner(squares, i, this.props);
     this.setState({
       squares: squares,
@@ -102,7 +107,6 @@ function checkHorizontal(squares, i, playerChar, props) {
   if (i%(props.width-1) != 0) {
     chainNum += checkRightHorizontal(squares, i+1, playerChar, props, 0);
   }
-  console.log(chainNum);
   // 勝利判定
   if (chainNum >= 3) {
     return true
